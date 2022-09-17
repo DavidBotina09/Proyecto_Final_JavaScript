@@ -61,14 +61,6 @@ const verificarClientes = (c) =>{
     if((isNaN(c))||(c > 5)||(c < 1)){
         cantidadClientes = null
     }
-    /*if(c > 5){
-        alert("el maximo de clientes por grupo es de 5 personas")
-        cantidadClientes = null
-    }
-    if(c < 1){
-        alert("el minimo de clientes es de 1 personas")
-        cantidadClientes = null
-    }*/
 }
 
 let carteleras 
@@ -193,7 +185,13 @@ botonVentas.addEventListener(`click`, () =>{
             ticketeslocales.remove()
             reservaciones.splice(indice,1)
             localStorage.setItem(`tiquetera`, JSON.stringify(reservaciones))
-            console.log("tickete eliminado")
+            Toastify({
+                text: "ticket eliminado",
+                className: "info",
+                style: {
+                  background: "linear-gradient(to right, #DF0101, #8A0868)",
+                }
+              }).showToast();
         })
     })
 })
@@ -205,36 +203,47 @@ let divPeliculas = document.getElementById("divPeliculas")
 buscador.addEventListener(`click`,(e) => {
     const encontrar = document.getElementById("encontrar").value
     divPeliculas.innerHTML = ""
-    const options = {
-        method: 'GET',
-        headers: {
-            'X-RapidAPI-Key': '732e426d40msh6a050703858e155p18d85ejsn83e3416ea393',
-            'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
-        }
-    };
-    
-    fetch(`https://online-movie-database.p.rapidapi.com/auto-complete?q=${encontrar}`, options)
-        .then(response => response.json())
-        .then(response => {
-            //divPeliculas = ""
-            let arrayMovies = response.d
-            arrayMovies.forEach((elementos) => {
-                let titulo = elementos.l
-                let  imagen = elementos.i.imageUrl
-                let actores = elementos.s 
-    
-                const poster = `
-                    <div>
-                        <img src="${imagen}">
-                        <h2>${titulo}</h2>
-                        <small>${actores}</small>
-                    </div>
-                `
-                divPeliculas.innerHTML += poster
+
+    if(encontrar == ""){
+        Toastify({
+            text: "Ingresa valores a buscar",
+            className: "info",
+            style: {
+              background: "linear-gradient(to right, #DF0101, #8A0868)",
+            }
+          }).showToast();
+    }else{
+        const options = {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '732e426d40msh6a050703858e155p18d85ejsn83e3416ea393',
+                'X-RapidAPI-Host': 'online-movie-database.p.rapidapi.com'
+            }
+        };
+        
+        fetch(`https://online-movie-database.p.rapidapi.com/auto-complete?q=${encontrar}`, options)
+            .then(response => response.json())
+            .then(response => {
+                let arrayMovies = response.d
+                arrayMovies.forEach((elementos) => {
+                    let titulo = elementos.l
+                    let  imagen = elementos.i.imageUrl
+                    let actores = elementos.s 
+        
+                    const poster = `
+                        <div>
+                            <img src="${imagen}">
+                            <h2>${titulo}</h2>
+                            <small>${actores}</small>
+                        </div>
+                    `
+                    divPeliculas.innerHTML += poster
+                })
             })
-        })
-        .catch(err => console.error(err));
-        arrayMovies = ""  
+            .catch(err => console.error(err));
+            arrayMovies = ""  
+    }
+    
 })
 
 
