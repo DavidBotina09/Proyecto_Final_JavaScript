@@ -129,10 +129,9 @@ formulario.addEventListener(`submit`,(e) => {
     bebidaA = ""
     comidaA = ""
     palomitasA = ""
-    console.log(tiquete)
-    console.log(reservaciones)
 })
 const botonTiquetera = document.getElementById("botonTiquetera")
+let divReservaciones = document.getElementById("divReservaciones")
 //funciones para mostrar los tiquetes
 botonTiquetera.addEventListener('click', () => {
     divReservaciones.innerHTML = ""
